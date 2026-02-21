@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заказ создан</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f3f4f6;">
+    <table role="presentation" style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td align="center" style="padding: 40px 0;">
+                <table role="presentation" style="width: 600px; max-width: 100%; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <!-- Header -->
+                    <tr>
+                        <td style="padding: 40px 40px 20px; text-align: center; background-color: #16a34a; border-radius: 8px 8px 0 0;">
+                            <h1 style="margin: 0; color: #ffffff; font-size: 28px;">✅ Заказ принят!</h1>
+                        </td>
+                    </tr>
+                    
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding: 40px;">
+                            <p style="margin: 0 0 20px; font-size: 16px; line-height: 1.6; color: #374151;">
+                                Здравствуйте, <strong>{{customerName}}</strong>!
+                            </p>
+                            <p style="margin: 0 0 20px; font-size: 16px; line-height: 1.6; color: #374151;">
+                                Ваш заказ <strong>#{{orderId}}</strong> успешно создан и принят в обработку.
+                            </p>
+                            
+                            <!-- Order Details -->
+                            <div style="margin: 30px 0; padding: 20px; background-color: #f9fafb; border-radius: 6px;">
+                                <h2 style="margin: 0 0 15px; font-size: 18px; color: #111827;">Состав заказа:</h2>
+                                {{#each items}}
+                                <div style="padding: 10px 0; border-bottom: 1px solid #e5e7eb;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                        <span style="font-size: 15px; color: #374151;"><strong>{{name}}</strong></span>
+                                        <span style="font-size: 15px; color: #374151;"><strong>{{total}} ₽</strong></span>
+                                    </div>
+                                    <div style="font-size: 14px; color: #6b7280;">
+                                        {{quantity}} шт. × {{price}} ₽
+                                    </div>
+                                </div>
+                                {{/each}}
+                                
+                                <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #e5e7eb;">
+                                    <div style="display: flex; justify-content: space-between;">
+                                        <span style="font-size: 18px; font-weight: bold; color: #111827;">Итого:</span>
+                                        <span style="font-size: 18px; font-weight: bold; color: #111827;">{{totalPrice}} ₽</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Delivery Address -->
+                            <div style="margin: 20px 0;">
+                                <h3 style="margin: 0 0 10px; font-size: 16px; color: #111827;">Адрес доставки:</h3>
+                                <p style="margin: 0; font-size: 15px; color: #374151;">{{address}}</p>
+                            </div>
+                            
+                            {{#if comment}}
+                            <div style="margin: 20px 0;">
+                                <h3 style="margin: 0 0 10px; font-size: 16px; color: #111827;">Комментарий:</h3>
+                                <p style="margin: 0; font-size: 15px; color: #374151;">{{comment}}</p>
+                            </div>
+                            {{/if}}
+                            
+                            <p style="margin: 30px 0 20px; font-size: 16px; line-height: 1.6; color: #374151;">
+                                Мы свяжемся с вами для подтверждения заказа и уточнения деталей доставки.
+                            </p>
+                            
+                            <table role="presentation" style="width: 100%;">
+                                <tr>
+                                    <td align="center">
+                                        <a href="{{frontendUrl}}/order/{{orderId}}" style="display: inline-block; padding: 14px 32px; background-color: #2563eb; color: #ffffff; text-decoration: none; border-radius: 6px; font-size: 16px; font-weight: bold;">
+                                            Посмотреть заказ
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                        <td style="padding: 20px 40px; background-color: #f9fafb; border-radius: 0 0 8px 8px; text-align: center;">
+                            <p style="margin: 0; font-size: 14px; color: #6b7280;">
+                                С уважением,<br>
+                                <strong>Команда Suvlavka</strong>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

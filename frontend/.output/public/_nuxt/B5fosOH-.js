@@ -1,0 +1,1 @@
+import{ak as n,u,s as t,al as i}from"./BhezHn9w.js";const l=n(async()=>{var o,s;let a,r;const e=u();if(e.initFromStorage(),!e.isAuthenticated)return t("/login");try{[a,r]=i(()=>e.fetchMe()),await a,r()}catch{return e.logout(),t("/login")}if(((o=e.user)==null?void 0:o.role)!=="manager"&&((s=e.user)==null?void 0:s.role)!=="admin")return t("/b2b")});export{l as default};

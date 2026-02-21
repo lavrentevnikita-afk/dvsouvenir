@@ -1,0 +1,33 @@
+{
+  "name": "dvsouvenir-frontend",
+  "version": "0.0.2",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "preview": "nuxt preview",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write \"**/*.{js,ts,vue,json,css,scss,md}\"",
+    "format:check": "prettier --check \"**/*.{js,ts,vue,json,css,scss,md}\""
+  },
+  "dependencies": {
+    "@nestjs/swagger": "^11.2.5",
+    "@pinia/nuxt": "^0.5.0",
+    "@vite-pwa/nuxt": "^0.10.0",
+    "nuxt": "3.13.0",
+    "pinia": "^2.1.7",
+    "swagger-ui-express": "^5.0.1",
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@nuxt/eslint-config": "^1.13.0",
+    "@nuxtjs/tailwindcss": "^6.12.0",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "prettier": "^3.8.1",
+    "typescript": "^5.0.0"
+  }
+}

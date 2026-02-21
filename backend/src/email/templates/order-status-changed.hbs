@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Статус заказа изменен</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f3f4f6;">
+    <table role="presentation" style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td align="center" style="padding: 40px 0;">
+                <table role="presentation" style="width: 600px; max-width: 100%; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <!-- Header -->
+                    <tr>
+                        <td style="padding: 40px 40px 20px; text-align: center; background-color: #9333ea; border-radius: 8px 8px 0 0;">
+                            <h1 style="margin: 0; color: #ffffff; font-size: 28px;">📦 Обновление заказа</h1>
+                        </td>
+                    </tr>
+                    
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding: 40px;">
+                            <p style="margin: 0 0 20px; font-size: 16px; line-height: 1.6; color: #374151;">
+                                Здравствуйте, <strong>{{customerName}}</strong>!
+                            </p>
+                            <p style="margin: 0 0 30px; font-size: 16px; line-height: 1.6; color: #374151;">
+                                Статус вашего заказа <strong>#{{orderId}}</strong> был изменен:
+                            </p>
+                            
+                            <!-- Status Change -->
+                            <div style="margin: 30px 0; padding: 30px; background-color: #f9fafb; border-radius: 6px; text-align: center;">
+                                <div style="margin-bottom: 20px;">
+                                    <span style="display: inline-block; padding: 8px 16px; background-color: #e5e7eb; color: #6b7280; border-radius: 20px; font-size: 14px;">
+                                        {{oldStatus}}
+                                    </span>
+                                    <span style="margin: 0 15px; font-size: 24px; color: #9ca3af;">→</span>
+                                    <span style="display: inline-block; padding: 8px 16px; {{statusClass}} border-radius: 20px; font-size: 14px; font-weight: bold; background-color: #dbeafe;">
+                                        {{newStatus}}
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <p style="margin: 30px 0 20px; font-size: 16px; line-height: 1.6; color: #374151;">
+                                Вы можете отслеживать актуальный статус заказа в личном кабинете.
+                            </p>
+                            
+                            <table role="presentation" style="width: 100%;">
+                                <tr>
+                                    <td align="center">
+                                        <a href="{{frontendUrl}}/order/{{orderId}}" style="display: inline-block; padding: 14px 32px; background-color: #2563eb; color: #ffffff; text-decoration: none; border-radius: 6px; font-size: 16px; font-weight: bold;">
+                                            Посмотреть заказ
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                        <td style="padding: 20px 40px; background-color: #f9fafb; border-radius: 0 0 8px 8px; text-align: center;">
+                            <p style="margin: 0; font-size: 14px; color: #6b7280;">
+                                С уважением,<br>
+                                <strong>Команда Suvlavka</strong>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

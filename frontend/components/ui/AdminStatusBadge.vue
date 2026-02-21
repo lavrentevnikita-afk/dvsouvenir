@@ -1,0 +1,45 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+
+const props = defineProps<{
+  status: string
+  map?: Record<string, { label: string; color: 'green' | 'red' | 'amber' | 'blue' | 'slate' | 'purple' }>
+}>()
+
+const config = computed(() => {
+  const defaultMap: Record<string, { label: string; color: 'green' | 'red' | 'amber' | 'blue' | 'slate' | 'purple' }> = {
+    active: { label: 'Активен', color: 'green' },
+    blocked: { label: 'Заблокирован', color: 'red' },
+    lead: { label: 'Заявка', color: 'amber' },
+    new: { label: 'Новый', color: 'blue' },
+    confirmed: { label: 'Подтверждён', color: 'green' },
+    in_work: { label: 'В работе', color: 'amber' },
+    shipped: { label: 'Отгружен', color: 'purple' },
+    closed: { label: 'Закрыт', color: 'slate' },
+    ok: { label: 'OK', color: 'green' },
+    partial: { label: 'Частично', color: 'amber' },
+    deficit: { label: 'Дефицит', color: 'red' },
+  }
+  
+  const map = props.map || defaultMap
+  return map[props.status] || { label: props.status, color: 'slate' }
+})
+
+const colorClasses = computed(() => {
+  const colors = {
+    green: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+    red: 'bg-red-50 text-red-700 border-red-200',
+    amber: 'bg-amber-50 text-amber-700 border-amber-200',
+    blue: 'bg-blue-50 text-blue-700 border-blue-200',
+    slate: 'bg-slate-50 text-slate-700 border-slate-200',
+    purple: 'bg-purple-50 text-purple-700 border-purple-200',
+  }
+  return colors[config.value.color]
+})
+</script>
+
+<template>
+  <span :class="['inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium border', colorClasses]">
+    {{ config.label }}
+  </span>
+</template>
