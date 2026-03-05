@@ -1,7 +1,4 @@
 {
   "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "typeRoots": ["./node_modules/@types", "./src/types"]
-  },
   "exclude": ["node_modules", "dist", "src/**/*.spec.ts"]
 }
