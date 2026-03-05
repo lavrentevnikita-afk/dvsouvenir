@@ -2,14 +2,16 @@ import { defineStore } from 'pinia'
 import { useRuntimeConfig } from '#app'
 import { useAuthStore } from './auth'
 
-export type CityOption = { code: string; name: string }
+export type CityOption = {
+  code: string
+  name: string
+  regionCode?: string
+  shortName?: string
+  fullName?: string
+}
 
 const STORAGE_KEY = 'dvsouvenir_city'
-
-// Fallback: used only if API is not reachable
-const FALLBACK_CITIES: CityOption[] = [
-  { code: 'MAIN', name: 'Производство' },
-]
+const FALLBACK_CITIES: CityOption[] = []
 
 interface CityState {
   city: CityOption | null
@@ -28,6 +30,44 @@ export const useCityStore = defineStore('city', {
     name: (s) => s.city?.name ?? null,
   },
   actions: {
+    normalizeCityRow(row: any): CityOption | null {
+      const code = String(row?.code || row?.cityCode || '').trim().toUpperCase()
+      if (!code) return null
+
+      const shortName = String(row?.shortName || row?.nameShort || row?.short || row?.name || '').trim()
+      const fullName = String(row?.fullName || row?.nameFull || row?.full || row?.name || shortName || code).trim()
+      const regionCode = String(row?.regionCode || row?.region || '').trim()
+
+      return {
+        code,
+        name: shortName || fullName || code,
+        shortName: shortName || undefined,
+        fullName: fullName || undefined,
+        regionCode: regionCode || undefined,
+      }
+    },
+
+    resolveCity(input: string | null | undefined): CityOption | null {
+      const raw = String(input || '').trim()
+      if (!raw) return null
+      const upper = raw.toUpperCase()
+
+      const found = this.cities.find((c) => {
+        const code = String(c.code || '').trim().toUpperCase()
+        const name = String(c.name || '').trim().toUpperCase()
+        const shortName = String(c.shortName || '').trim().toUpperCase()
+        const fullName = String(c.fullName || '').trim().toUpperCase()
+        return code === upper || name === upper || shortName === upper || fullName === upper
+      })
+
+      return found || {
+        code: upper,
+        name: raw,
+        shortName: raw,
+        fullName: raw,
+      }
+    },
+
     async loadCities() {
       const config = useRuntimeConfig()
       const apiBaseUrl = process.server
@@ -35,52 +75,72 @@ export const useCityStore = defineStore('city', {
         : (config.public as any).apiBaseUrl
 
       try {
-        const res = await $fetch<{ cities: CityOption[] }>('/api/catalog/cities', {
-          baseURL: apiBaseUrl,
-        })
-        if (Array.isArray(res?.cities) && res.cities.length) {
-          this.cities = res.cities
+        const res = await $fetch<{ cities: any[] }>('/api/catalog/cities')
+        const normalized = Array.isArray(res?.cities)
+          ? res.cities.map((row) => this.normalizeCityRow(row)).filter(Boolean) as CityOption[]
+          : []
+
+        if (normalized.length) {
+          this.cities = normalized
+          return
         }
       } catch {
-        // keep fallback
+        // try explicit baseURL fallback below
+      }
+
+      try {
+        const res = await $fetch<{ cities: any[] }>('/api/catalog/cities', {
+          baseURL: apiBaseUrl,
+        })
+        const normalized = Array.isArray(res?.cities)
+          ? res.cities.map((row) => this.normalizeCityRow(row)).filter(Boolean) as CityOption[]
+          : []
+
+        if (normalized.length) {
+          this.cities = normalized
+        }
+      } catch {
+        this.cities = FALLBACK_CITIES
       }
     },
 
     async init() {
       if (this.initialized) return
       if (!process.client) {
-        this.initialized = true
         return
       }
 
-      // Cities list (dynamic)
       await this.loadCities()
 
-      // 1) localStorage — user selection has priority
       const raw = window.localStorage.getItem(STORAGE_KEY)
       if (raw) {
         try {
           const parsed = JSON.parse(raw) as CityOption
           if (parsed?.code) {
-            const found = this.cities.find((c) => c.code === parsed.code)
-            this.city = found || { code: String(parsed.code), name: String(parsed.name || parsed.code) }
+            if (String(parsed.code).trim().toUpperCase() === 'MAIN') {
+              this.city = null
+            } else {
+              const found = this.cities.find((c) => c.code === parsed.code)
+              this.city = found || {
+                code: String(parsed.code),
+                name: String(parsed.name || parsed.code),
+                shortName: String(parsed.shortName || parsed.name || parsed.code),
+                fullName: String(parsed.fullName || parsed.name || parsed.code),
+                regionCode: String(parsed.regionCode || ''),
+              }
+            }
           }
         } catch {
           // ignore
         }
       }
 
-      // 2) account city (only if no local selection)
       if (!this.city) {
         const auth = useAuthStore()
         auth.initFromStorage()
         const accountCity = auth.user?.city
         if (accountCity) {
-          const found = this.cities.find((c) => c.code === accountCity) || {
-            code: String(accountCity),
-            name: String(accountCity),
-          }
-          this.city = found
+          this.city = this.resolveCity(accountCity)
         }
       }
 
@@ -104,14 +164,17 @@ export const useCityStore = defineStore('city', {
         return
       }
 
-      const c = String(code).trim().toUpperCase()
-      const next = this.cities.find((x) => x.code === c) || { code: c, name: c }
+      const next = this.resolveCity(code)
+      if (!next) {
+        this.city = null
+        this.persist()
+        return
+      }
+
       this.city = next
       this.persist()
-      // ВАЖНО: город выбора витрины НЕ должен менять профиль и не должен разлогинивать.
     },
   },
 })
 
-// Backward-compat export (some pages used CITY_OPTIONS)
 export const CITY_OPTIONS = FALLBACK_CITIES
