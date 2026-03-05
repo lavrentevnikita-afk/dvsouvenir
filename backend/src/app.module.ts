@@ -58,9 +58,11 @@ import { Product } from './catalog/product.entity'
         password: process.env.POSTGRES_PASSWORD || 'souvenir',
         database: process.env.POSTGRES_DB || 'souvenir',
         autoLoadEntities: true,
-        // IMPORTANT: Use synchronize only in development
-        // In production, use migrations instead
-        synchronize: process.env.NODE_ENV !== 'production',
+        // IMPORTANT: Use migrations in production.
+        // Temporary bootstrap flag for empty DBs: TYPEORM_SYNCHRONIZE=true
+        synchronize:
+          (process.env.TYPEORM_SYNCHRONIZE || '').toLowerCase() === 'true' ||
+          process.env.NODE_ENV !== 'production',
         logging: process.env.NODE_ENV !== 'production' ? ['error', 'warn'] : false,
       }),
     }),
