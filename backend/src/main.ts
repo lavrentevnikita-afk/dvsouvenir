@@ -53,9 +53,6 @@ async function bootstrap() {
     if (!fs.existsSync(staticDir)) fs.mkdirSync(staticDir, { recursive: true })
 
     // Раздаём /uploads/... из реальной папки uploads
-      // Seed test data
-      const testDataService = app.get('TestDataService');
-      await testDataService.seed();
     app.use('/uploads', express.static(uploadsDir))
     logger.log(`Static uploads dir: ${uploadsDir}`)
   }
