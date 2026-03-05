@@ -35,6 +35,7 @@
     "@smithy/node-http-handler": "^3.0.0",
     "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.6",
+    "@types/multer": "^2.0.0",
     "@types/pdfkit": "^0.17.4",
     "bcrypt": "^5.1.1",
     "class-transformer": "^0.5.1",
